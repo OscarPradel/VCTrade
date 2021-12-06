@@ -108,6 +108,8 @@ export default defineComponent({
     persistData() {
       if (localStorage.userList) {
         this.filteredUserList = JSON.parse(localStorage.userList);
+      } else {
+        localStorage.userList = JSON.stringify(this.filteredUserList);
       }
       if (localStorage.selectedUser) {
         this.selectedUser = JSON.parse(localStorage.selectedUser);
