@@ -1,16 +1,40 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+  <div class="main-container">
+    <Home v-if="isMounted" :userList="userList" />
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import HelloWorld from "./components/HelloWorld.vue";
+import { defineComponent, PropType } from "vue";
+import Home from "./views/Home.vue";
+import DataService from "./service/DataService";
+import ResponseData from "./types/ResponseData";
+import User from "./types/User";
 
 export default defineComponent({
   name: "App",
   components: {
-    HelloWorld,
+    Home,
+  },
+  data() {
+    return {
+      userList: [] as PropType<User[]>,
+      isMounted: false,
+    };
+  },
+  mounted() {
+    const fetchUserData = async () => {
+      await DataService.getMultipleUsers()
+        .then((response: ResponseData) => {
+          this.userList = response.data.results;
+          this.isMounted = true;
+        })
+        .catch((err) => {
+          // TODO-OOP: Better error handling
+          alert(err);
+        });
+    };
+    fetchUserData();
   },
 });
 </script>
@@ -22,6 +46,12 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.main-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  overflow: auto;
 }
 </style>
