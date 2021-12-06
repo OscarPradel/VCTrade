@@ -4,6 +4,7 @@
       <input
         class="form-control"
         @keyup="handleChange"
+        @change="handleChange"
         v-model="searchInput"
         type="text"
         placeholder="Search for names and genders"
